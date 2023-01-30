@@ -9,15 +9,32 @@ using TMPro;
 public class ListOfRooms : MonoBehaviourPunCallbacks
 {
     [SerializeField] private Transform _roomsContainer;
-    [SerializeField] private Button _buttonTeamplate;
+    [SerializeField] private GameObject _buttonTeamplate;
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
-        foreach(RoomInfo room in roomList)
+        ClearRoomList();
+
+        foreach (RoomInfo room in roomList)
         {
-            _buttonTeamplate.GetComponentInChildren<Text>().text = room.Name;
-            Instantiate(_buttonTeamplate);
-            _buttonTeamplate.transform.SetParent(_roomsContainer);
+            _buttonTeamplate.GetComponentInChildren<TextMeshProUGUI>().text = room.Name;
+            _buttonTeamplate.GetComponent<Button>().onClick.AddListener(OnJoinRoomButtonClick);
+            Instantiate(_buttonTeamplate, _roomsContainer);
+        }
+    }
+
+    public void OnJoinRoomButtonClick(string roomName)
+    {
+        _buttonTeamplate.GetComponentInChildren<TextMeshProUGUI>().text = roomName;
+        
+        PhotonNetwork.JoinRoom(roomName);
+    }
+
+    public void ClearRoomList()
+    {
+        foreach (Transform room in _roomsContainer)
+        {
+            Destroy(room.gameObject);
         }
     }
 }
