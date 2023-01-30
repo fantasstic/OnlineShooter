@@ -3229,6 +3229,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _roomsContainer: {fileID: 2144649985}
   _buttonTeamplate: {fileID: 6359981358474295890, guid: 737feea612e3e3e4dbb46dd21874ed88, type: 3}
+  _loadingScreen: {fileID: 1118697104}
+  _joinRoomPanel: {fileID: 682455362}
 --- !u!1 &1787505822
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,6 +10,8 @@ public class ListOfRooms : MonoBehaviourPunCallbacks
 {
     [SerializeField] private Transform _roomsContainer;
     [SerializeField] private GameObject _buttonTeamplate;
+    [SerializeField] private GameObject _loadingScreen;
+    [SerializeField] private GameObject _joinRoomPanel;
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
@@ -17,9 +19,12 @@ public class ListOfRooms : MonoBehaviourPunCallbacks
 
         foreach (RoomInfo room in roomList)
         {
-            _buttonTeamplate.GetComponentInChildren<TextMeshProUGUI>().text = room.Name;
-            _buttonTeamplate.GetComponent<Button>().onClick.AddListener(OnJoinRoomButtonClick);
-            Instantiate(_buttonTeamplate, _roomsContainer);
+            GameObject createdButton = Instantiate(_buttonTeamplate, _roomsContainer);
+            createdButton.GetComponentInChildren<TextMeshProUGUI>().text = room.Name;
+            createdButton.GetComponent<Button>().onClick.AddListener(() =>
+            {
+                OnJoinRoomButtonClick(room.Name);
+            });
         }
     }
 
@@ -28,6 +33,8 @@ public class ListOfRooms : MonoBehaviourPunCallbacks
         _buttonTeamplate.GetComponentInChildren<TextMeshProUGUI>().text = roomName;
         
         PhotonNetwork.JoinRoom(roomName);
+        _loadingScreen.SetActive(true);
+        _joinRoomPanel.SetActive(false);
     }
 
     public void ClearRoomList()
